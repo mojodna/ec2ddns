@@ -13,7 +13,7 @@ def _host_absolute(name):
     Prevents us from making relative DNS records by mistake.
     """
 
-    if not name.endswith("."):
+    if not name.endswith(".") and not re.match("^[\d.]+$",name):
         name = name + "."
 
     return name
