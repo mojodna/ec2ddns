@@ -42,6 +42,7 @@ def parse_opts():
     parser.add_option("-t", "--ttl", dest="ttl", default="60")
     parser.add_option("-d", "--delete", dest="delete", action="store_true", default=False)
     parser.add_option("-v", "--verbose", dest="verbose", action="store_true", default=False)
+    parser.add_option("-A", "--recordtype", dest="recordtype",action="store_true",default="CNAME")
     (options, args) = parser.parse_args()
 
     if (options.delete and len(args) != 1) or (not options.delete and len(args) != 2):
@@ -52,6 +53,9 @@ def parse_opts():
         print "Need a valid AWS key and secret"
         parser.print_help()
         sys.exit(1)
+
+    if options.recordtype:
+        options.recordtype = 'A'
 
     return (options, args)
 
@@ -103,13 +107,16 @@ def main():
         'name': hostname_desired,
         'resource_records': [hostname_public],
         'ttl': options.ttl,
-        'type': 'CNAME'}
+        'type': options.recordtype}
 
     rr_desired_exists = False
     transaction = ResourceRecordSets(r53, zone_id)
 
     # Remove any records that don't precisely match our desired CNAME.
     for rr in rrs:
+        print rr.__dict__
+        print rr_desired
+
         if rr.__dict__ == rr_desired:
             rr_desired_exists = True
         else:
@@ -118,7 +125,7 @@ def main():
             rr_change.ttl = rr.ttl
 
     if not rr_desired_exists:
-        rr_change = transaction.add_change("CREATE", hostname_desired, "CNAME")
+        rr_change = transaction.add_change("CREATE", hostname_desired, options.recordtype)
         rr_change.resource_records = [hostname_public]
         rr_change.ttl = options.ttl
 
