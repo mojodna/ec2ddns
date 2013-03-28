@@ -82,7 +82,7 @@ def main():
     # Ugly manifestation from the current API/library.
     zones = [ hz.Id.replace('/hostedzone/', '')
         for hz in r53.get_all_hosted_zones().ListHostedZonesResponse.HostedZones
-        if re.search('\.?%s$' % re.escape(hz.Name), domainname) ]
+        if re.search('\.?%s\.?$' % re.escape(domainname), hz.Name) ]
 
     if not len(zones):
         print "No hostedZones found for %r" % domainname
