@@ -1,6 +1,6 @@
 # ec2ddns
 
-Python utlity to register an EC2 instance's hostname in Route 53.
+Python utility to register an EC2 instance's hostname in Route 53.
 
 ## Usage
 
@@ -11,6 +11,9 @@ Register an instance:
 Unregister an instance:
 
     /usr/bin/python /usr/sbin/ec2ddns.py -k ${AWS_KEY} -s ${AWS_SECRET} ${DESIRE_HOSTNAME} --delete
+
+A `CNAME` record will be used by default. To use an `A` record, use `-r A` and
+provide an IP address as the public hostname.
 
 ## IAM policy
 

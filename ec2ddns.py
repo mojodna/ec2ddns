@@ -40,9 +40,9 @@ def parse_opts():
     parser.add_option("-k", "--key", dest="key", help="Required")
     parser.add_option("-s", "--secret", dest="secret", help="Required")
     parser.add_option("-t", "--ttl", dest="ttl", default="60")
-    parser.add_option("-d", "--delete", dest="delete", action="store_true", default=False)
-    parser.add_option("-v", "--verbose", dest="verbose", action="store_true", default=False)
-    parser.add_option("-A", "--recordtype", dest="recordtype",action="store_true",default="CNAME")
+    parser.add_option("-r", "--recordtype", dest="recordtype", default="CNAME")
+    parser.add_option("-d", "--delete", dest="delete", action="store_true")
+    parser.add_option("-v", "--verbose", dest="verbose", action="store_true")
     (options, args) = parser.parse_args()
 
     if (options.delete and len(args) != 1) or (not options.delete and len(args) != 2):
@@ -53,9 +53,6 @@ def parse_opts():
         print "Need a valid AWS key and secret"
         parser.print_help()
         sys.exit(1)
-
-    if options.recordtype:
-        options.recordtype = 'A'
 
     return (options, args)
 
